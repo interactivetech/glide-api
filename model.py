@@ -47,15 +47,7 @@ def load_models(has_cuda,
   return options, options_up,model,model_up, diffusion,diffusion_up
 
 # Create a classifier-free guidance sampling function
-def model_fn(x_t, ts, **kwargs):
-    half = x_t[: len(x_t) // 2]
-    combined = th.cat([half, half], dim=0)
-    model_out = model(combined, ts, **kwargs)
-    eps, rest = model_out[:, :3], model_out[:, 3:]
-    cond_eps, uncond_eps = th.split(eps, len(eps) // 2, dim=0)
-    half_eps = uncond_eps + guidance_scale * (cond_eps - uncond_eps)
-    eps = th.cat([half_eps, half_eps], dim=0)
-    return th.cat([eps, rest], dim=1)
+
 
 def sample_model(prompt,
                  batch_size,
@@ -66,12 +58,22 @@ def sample_model(prompt,
                  diffusion,
                  diffusion_up,
                  options,
-                 options_up
+                 options_up,
+                 device
                  ):
   ##############################
   # Sample from the base model #
   ##############################
-
+    def model_fn(x_t, ts, **kwargs):
+        half = x_t[: len(x_t) // 2]
+        combined = th.cat([half, half], dim=0)
+        model_out = model(combined, ts, **kwargs)
+        eps, rest = model_out[:, :3], model_out[:, 3:]
+        cond_eps, uncond_eps = th.split(eps, len(eps) // 2, dim=0)
+        half_eps = uncond_eps + guidance_scale * (cond_eps - uncond_eps)
+        eps = th.cat([half_eps, half_eps], dim=0)
+        return th.cat([eps, rest], dim=1)
+    
     # Create the text tokens to feed to the model.
     tokens = model.tokenizer.encode(prompt)
     tokens, mask = model.tokenizer.padded_tokens_and_mask(
@@ -100,9 +102,10 @@ def sample_model(prompt,
 
     # Sample from the base model.
     model.del_cache()
+    shape=(full_batch_size, 3, options["image_size"], options["image_size"])
     samples = diffusion.p_sample_loop(
         model_fn,
-        (full_batch_size, 3, options["image_size"], options["image_size"]),
+        shape,
         device=device,
         clip_denoised=True,
         progress=True,
@@ -151,5 +154,5 @@ def sample_model(prompt,
     )[:full_batch_size]
     model_up.del_cache()
     scaled = ((up_samples + 1)*127.5).round().clamp(0,255).to(th.uint8).cpu()
-    reshaped = scaled.permute(0, 2, 3, 1)#.reshape([up_samples.shape[2], -1, 3])
-    return up_samples
+    reshaped = scaled.permute(0, 2, 3, 1).numpy()#.reshape([up_samples.shape[2], -1, 3])
+    return reshaped

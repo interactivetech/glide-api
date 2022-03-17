@@ -45,8 +45,9 @@ app = Flask(__name__)
 #     encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
 #     return encoded_img
 def get_response_image(im):
+    im_pillow = Image.fromarray(im)
     byte_arr = io.BytesIO()
-    im.save(byte_arr, format='jpeg') # convert the PIL image to byte array
+    im_pillow.save(byte_arr, format='jpeg') # convert the PIL image to byte array
     encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
     return encoded_img
 
@@ -80,7 +81,8 @@ def generate():
                  diffusion,
                  diffusion_up,
                  options,
-                 options_up
+                 options_up,
+                 device
                  )
         # model.del_cache()
         # model_up.del_cache()
