@@ -1,1 +1,1 @@
-!pip install git+https://github.com/openai/glide-text2im
+git+https://github.com/openai/glide-text2im
