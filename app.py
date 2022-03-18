@@ -141,6 +141,8 @@ def generate():
                             'result': encoded_images})
         except Exception as e:
             print(e)
+            timestamp = strftime('%Y-%b-%d-%H:%M')
+
             app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
                         timestamp,
                         request.remote_addr,
