@@ -140,6 +140,16 @@ def generate():
                             'result': encoded_images})
         except Exception as e:
             print(e)
+            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
+                        timestamp,
+                        request.remote_addr,
+                        request.method,
+                        request.scheme,
+                        request.full_path,
+                        input_json['prompt'],
+                        input_json['n_images'],
+                        "ERROR"
+                        )
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 # @app.after_request
