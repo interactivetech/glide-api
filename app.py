@@ -17,7 +17,7 @@ from time import strftime
 import traceback
 from time import time
 import torch as th
-
+th.multiprocessing.set_start_method('spawn')
 has_cuda = th.cuda.is_available()
 device = th.device('cpu' if not has_cuda else 'cuda')
 t0=time()
