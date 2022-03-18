@@ -26,6 +26,10 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          device,
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
+options_100, options_up_100,model_100,model_up_100,diffusion_100, diffusion_up_100 = load_models(has_cuda,
+                                                                         device,
+                                                                         timestep_respacing='100',
+                                                                         timestep_respacing_up='fast27')
 print("Done Loading, time: {} sec.".format(time()-t0))
 
 batch_size = 10
@@ -62,28 +66,56 @@ def generate():
         input_json = request.get_json(force=True) 
         print("Prompt: {}".format(input_json['prompt']))
         timestamp = strftime('%Y-%b-%d-%H:%M')
-        app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
-                timestamp,
-                request.remote_addr,
-                request.method,
-                request.scheme,
-                request.full_path,
-                input_json['prompt'],
-                input_json['n_images']
-                )
-        up_samples = sample_model(
-                 input_json['prompt'],
-                 input_json['n_images'],
-                 guidance_scale,
-                 upsample_temp,
-                 model,
-                 model_up,
-                 diffusion,
-                 diffusion_up,
-                 options,
-                 options_up,
-                 device
-                 )
+        if input_json['type']=='fast':
+            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s,%s',
+                    timestamp,
+                    request.remote_addr,
+                    request.method,
+                    request.scheme,
+                    request.full_path,
+                    input_json['prompt'],
+                    input_json['n_images'],
+                    input_json['type']
+                    )
+            up_samples = sample_model(
+                    input_json['prompt'],
+                    input_json['n_images'],
+                    guidance_scale,
+                    upsample_temp,
+                    model,
+                    model_up,
+                    diffusion,
+                    diffusion_up,
+                    options,
+                    options_up,
+                    device
+                    )
+        elif input_json['type']=='high':
+            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s,%s',
+                    timestamp,
+                    request.remote_addr,
+                    request.method,
+                    request.scheme,
+                    request.full_path,
+                    input_json['prompt'],
+                    input_json['n_images'],
+                    input_json['type']
+                    )
+            up_samples = sample_model(
+                    input_json['prompt'],
+                    input_json['n_images'],
+                    guidance_scale,
+                    upsample_temp,
+                    model_100,
+                    model_up_100,
+                    diffusion_100,
+                    diffusion_up_100,
+                    options_100,
+                    options_up_100,
+                    device
+                    )
+            
+
         # model.del_cache()
         # model_up.del_cache()
         # images =generate_images(
@@ -128,7 +160,7 @@ if __name__ == '__main__':
     logger = logging.getLogger('tdm')
     app.logger.setLevel(logging.INFO)
     app.logger.addHandler(handler)
-    app.logger.info("timestamp,request.remote_addr,request.method,request.scheme,request.full_path,prompt,n_images,gen_top_k")
+    app.logger.info("timestamp,request.remote_addr,request.method,request.scheme,request.full_path,prompt,n_images,type")
     app.run(
         host="0.0.0.0",
         port=5000
