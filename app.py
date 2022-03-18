@@ -64,6 +64,7 @@ def generate():
     if request.method == "POST":
         try:
             input_json = request.get_json(force=True) 
+            assert len(input_json['prompt']) < 4097
             print("Prompt: {}".format(input_json['prompt']))
             timestamp = strftime('%Y-%b-%d-%H:%M')
             if input_json['type']=='fast':
