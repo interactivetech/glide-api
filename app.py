@@ -67,7 +67,7 @@ def generate():
         print("Prompt: {}".format(input_json['prompt']))
         timestamp = strftime('%Y-%b-%d-%H:%M')
         if input_json['type']=='fast':
-            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s,%s',
+            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
                     timestamp,
                     request.remote_addr,
                     request.method,
@@ -91,7 +91,7 @@ def generate():
                     device
                     )
         elif input_json['type']=='high':
-            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s,%s',
+            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
                     timestamp,
                     request.remote_addr,
                     request.method,
