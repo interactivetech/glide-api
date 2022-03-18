@@ -62,85 +62,85 @@ def index():
 @app.route('/generate', methods=['POST'])
 def generate():
     if request.method == "POST":
-        
-        input_json = request.get_json(force=True) 
-        print("Prompt: {}".format(input_json['prompt']))
-        timestamp = strftime('%Y-%b-%d-%H:%M')
-        if input_json['type']=='fast':
-            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
-                    timestamp,
-                    request.remote_addr,
-                    request.method,
-                    request.scheme,
-                    request.full_path,
-                    input_json['prompt'],
-                    input_json['n_images'],
-                    input_json['type']
-                    )
-            up_samples = sample_model(
-                    input_json['prompt'],
-                    input_json['n_images'],
-                    guidance_scale,
-                    upsample_temp,
-                    model,
-                    model_up,
-                    diffusion,
-                    diffusion_up,
-                    options,
-                    options_up,
-                    device
-                    )
-        elif input_json['type']=='high':
-            app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
-                    timestamp,
-                    request.remote_addr,
-                    request.method,
-                    request.scheme,
-                    request.full_path,
-                    input_json['prompt'],
-                    input_json['n_images'],
-                    input_json['type']
-                    )
-            up_samples = sample_model(
-                    input_json['prompt'],
-                    input_json['n_images'],
-                    guidance_scale,
-                    upsample_temp,
-                    model_100,
-                    model_up_100,
-                    diffusion_100,
-                    diffusion_up_100,
-                    options_100,
-                    options_up_100,
-                    device
-                    )
-            
+        try:
+            input_json = request.get_json(force=True) 
+            print("Prompt: {}".format(input_json['prompt']))
+            timestamp = strftime('%Y-%b-%d-%H:%M')
+            if input_json['type']=='fast':
+                app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
+                        timestamp,
+                        request.remote_addr,
+                        request.method,
+                        request.scheme,
+                        request.full_path,
+                        input_json['prompt'],
+                        input_json['n_images'],
+                        input_json['type']
+                        )
+                up_samples = sample_model(
+                        input_json['prompt'],
+                        input_json['n_images'],
+                        guidance_scale,
+                        upsample_temp,
+                        model,
+                        model_up,
+                        diffusion,
+                        diffusion_up,
+                        options,
+                        options_up,
+                        device
+                        )
+            elif input_json['type']=='high':
+                app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
+                        timestamp,
+                        request.remote_addr,
+                        request.method,
+                        request.scheme,
+                        request.full_path,
+                        input_json['prompt'],
+                        input_json['n_images'],
+                        input_json['type']
+                        )
+                up_samples = sample_model(
+                        input_json['prompt'],
+                        input_json['n_images'],
+                        guidance_scale,
+                        upsample_temp,
+                        model_100,
+                        model_up_100,
+                        diffusion_100,
+                        diffusion_up_100,
+                        options_100,
+                        options_up_100,
+                        device
+                        )
+                
 
-        # model.del_cache()
-        # model_up.del_cache()
-        # images =generate_images(
-        #     input_json['prompt'],
-        #     input_json['n_images'],
-        #     model,
-        #     tokenizer,
-        #     vqgan,
-        #     clip,
-        #     processor,
-        #     model_params, 
-        #     vqgan_params, 
-        #     clip_params,
-        #     input_json['gen_top_k'],
-        #     )
-        encoded_images = [get_response_image(i) for i in up_samples]
-        # encoded_imges = []
-        # for image_path in range(10):
-        #     encoded_imges.append(get_response_image_test())
-        return jsonify({'prompt':input_json['prompt'],
-                        'n_images':input_json['n_images'],
-                        'result': encoded_images})
-        # except Exception as e:
-        #     print(e)
-        #     return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
+            # model.del_cache()
+            # model_up.del_cache()
+            # images =generate_images(
+            #     input_json['prompt'],
+            #     input_json['n_images'],
+            #     model,
+            #     tokenizer,
+            #     vqgan,
+            #     clip,
+            #     processor,
+            #     model_params, 
+            #     vqgan_params, 
+            #     clip_params,
+            #     input_json['gen_top_k'],
+            #     )
+            encoded_images = [get_response_image(i) for i in up_samples]
+            # encoded_imges = []
+            # for image_path in range(10):
+            #     encoded_imges.append(get_response_image_test())
+            return jsonify({'prompt':input_json['prompt'],
+                            'n_images':input_json['n_images'],
+                            'result': encoded_images})
+        except Exception as e:
+            print(e)
+            return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 # @app.after_request
 # def after_request(response):
