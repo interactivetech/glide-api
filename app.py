@@ -17,6 +17,7 @@ from time import strftime
 import traceback
 from time import time
 import torch as th
+from waitress import serve
 
 has_cuda = th.cuda.is_available()
 device = th.device('cpu' if not has_cuda else 'cuda')
@@ -175,7 +176,8 @@ if __name__ == '__main__':
     app.logger.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     app.logger.info("timestamp,request.remote_addr,request.method,request.scheme,request.full_path,prompt,n_images,type")
-    app.run(
-        host="0.0.0.0",
-        port=5000
-    )
+    # app.run(
+    #     host="0.0.0.0",
+    #     port=5000
+    # )
+    serve(app,host='0.0.0.0',port=5000)
