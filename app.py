@@ -133,13 +133,22 @@ def generate():
             #     clip_params,
             #     input_json['gen_top_k'],
             #     )
-            encoded_images = [get_response_image(i) for i in up_samples]
+
+            encoded_images = [Image.fromarray(i) for i in up_samples]
+            names = []
+            url_paths = []
+            SAVE_DIR = '/images'
+            for ind,i in enumerate(encoded_images):
+                i = Image.fromarray
+                names.append('{}.jpg'.format(ind))
+                i.save(os.path.join(SAVE_DIR,names[ind]))
+                url_paths.append('https://dalleapi.com/static/{}'.format(names[ind]))
             # encoded_imges = []
             # for image_path in range(10):
             #     encoded_imges.append(get_response_image_test())
             return jsonify({'prompt':input_json['prompt'],
                             'n_images':input_json['n_images'],
-                            'result': encoded_images})
+                            'result': url_paths})
         except Exception as e:
             print(e)
             timestamp = strftime('%Y-%b-%d-%H:%M')
@@ -180,4 +189,4 @@ if __name__ == '__main__':
     #     host="0.0.0.0",
     #     port=5000
     # )
-    serve(app,host='0.0.0.0',port=5000)
+    serve(app,host='0.0.0.0',port=5000,threads=1)
