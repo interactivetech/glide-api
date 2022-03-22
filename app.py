@@ -139,7 +139,6 @@ def generate():
             url_paths = []
             SAVE_DIR = '/images'
             for ind,i in enumerate(encoded_images):
-                i = Image.fromarray
                 names.append('{}.jpg'.format(ind))
                 i.save(os.path.join(SAVE_DIR,names[ind]))
                 url_paths.append('https://dalleapi.com/static/{}'.format(names[ind]))
