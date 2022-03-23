@@ -148,7 +148,9 @@ def generate():
             s =  jsonify({'prompt':input_json['prompt'],
                             'n_images':input_json['n_images'],
                             'result': url_paths})
-            print(s)
+            print({'prompt':input_json['prompt'],
+                            'n_images':input_json['n_images'],
+                            'result': url_paths})
             return s
         except Exception as e:
             print(e)
