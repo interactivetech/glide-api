@@ -145,9 +145,11 @@ def generate():
             # encoded_imges = []
             # for image_path in range(10):
             #     encoded_imges.append(get_response_image_test())
-            return jsonify({'prompt':input_json['prompt'],
+            s =  jsonify({'prompt':input_json['prompt'],
                             'n_images':input_json['n_images'],
                             'result': url_paths})
+            print(s)
+            return s
         except Exception as e:
             print(e)
             timestamp = strftime('%Y-%b-%d-%H:%M')
