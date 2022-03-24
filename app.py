@@ -29,7 +29,7 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          timestep_respacing_up='fast27')
 options_100, options_up_100,model_100,model_up_100,diffusion_100, diffusion_up_100 = load_models(has_cuda,
                                                                          device,
-                                                                         timestep_respacing='100',
+                                                                         timestep_respacing='75',
                                                                          timestep_respacing_up='fast27')
 print("Done Loading, time: {} sec.".format(time()-t0))
 
