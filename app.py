@@ -10,6 +10,7 @@ from PIL import Image
 import io
 import numpy as np
 from model import load_models, sample_model
+from service_streamer import ThreadedStreamer, Streamer
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -18,6 +19,13 @@ import traceback
 from time import time
 import torch as th
 from waitress import serve
+streamer = Streamer(sample_model,
+                    batch_size=1,
+                    max_latency=60*30,
+                    worker_num=4,
+                    wait_for_worker_ready=False,
+                    cuda_devices=[0],
+                    mp_start_method="fork")
 
 has_cuda = th.cuda.is_available()
 device = th.device('cpu' if not has_cuda else 'cuda')
@@ -35,7 +43,8 @@ print("Done Loading, time: {} sec.".format(time()-t0))
 
 batch_size = 10
 guidance_scale = 3.0
-
+SAVE_DIR = '/images'
+os.makedirs(SAVE_DIR,exist_ok=True)
 # Tune this parameter to control the sharpness of 256x256 images.
 # A value of 1.0 is sharper, but sometimes results in grainy artifacts.
 upsample_temp = 0.997
@@ -79,8 +88,8 @@ def generate():
                         input_json['n_images'],
                         input_json['type']
                         )
-                up_samples = sample_model(
-                        input_json['prompt'],
+                up_samples = streamer.predict(
+                        [(input_json['prompt'],
                         input_json['n_images'],
                         guidance_scale,
                         upsample_temp,
@@ -90,7 +99,7 @@ def generate():
                         diffusion_up,
                         options,
                         options_up,
-                        device
+                        device)]
                         )
             elif input_json['type']=='high':
                 app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
@@ -103,8 +112,8 @@ def generate():
                         input_json['n_images'],
                         input_json['type']
                         )
-                up_samples = sample_model(
-                        input_json['prompt'],
+                up_samples = streamer.predict(
+                        [input_json['prompt'],
                         input_json['n_images'],
                         guidance_scale,
                         upsample_temp,
@@ -114,7 +123,7 @@ def generate():
                         diffusion_up_100,
                         options_100,
                         options_up_100,
-                        device
+                        device]
                         )
                 
 
@@ -134,7 +143,9 @@ def generate():
             #     input_json['gen_top_k'],
             #     )
 
-            encoded_images = [Image.fromarray(i) for i in up_samples]
+            encoded_images = [Image.fromarray(i) for i in up_samples[0][0]]
+            encoded_images = [i.resize((200,200)) for i in encoded_images]
+
             names = []
             url_paths = []
             SAVE_DIR = '/images'
