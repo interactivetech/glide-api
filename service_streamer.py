@@ -194,7 +194,7 @@ class _BaseStreamWorker(object):
         # publish results to redis
         for i, item in enumerate(batch):
             client_id, task_id, request_id, _ = item
-            self._send_response(client_id, task_id, request_id, model_outputs[i])
+            self._send_response(client_id, task_id, request_id, model_outputs[i])# sends original batch result
 
         batch_size = len(batch)
         logger.info("[gpu worker %d] run_once batch_size: %d start_at: %s spend: %s" % (
