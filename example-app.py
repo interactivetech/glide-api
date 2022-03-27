@@ -21,10 +21,10 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          device,
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
-model.eval()
-model_up.eval()
-diffusion.eval()
-diffusion_up.eval()
+# model.eval()
+# model_up.eval()
+# diffusion.eval()
+# diffusion_up.eval()
 print(os.cpu_count())
 # streamer = Streamer(sample_model,
 #                     batch_size=1,
