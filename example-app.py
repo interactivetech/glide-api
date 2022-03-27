@@ -9,6 +9,22 @@ from PIL import Image
 import os
 app = Flask(__name__)
 # batch_size = 10
+
+# model.eval()
+# model_up.eval()
+# diffusion.eval()
+# diffusion_up.eval()
+print(os.cpu_count())
+streamer = Streamer(sample_model,
+                    batch_size=1,
+                    max_latency=60*30,
+                    worker_num=2,
+                    wait_for_worker_ready=False,
+                    cuda_devices=[0],
+                    mp_start_method="fork")
+# streamer = ThreadedStreamer(sample_model,
+#                     batch_size=1,
+#                     max_latency=60*30)
 guidance_scale = 3.0
 SAVE_DIR = '/images'
 os.makedirs(SAVE_DIR,exist_ok=True)
@@ -21,22 +37,6 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          device,
                                                                          timestep_respacing='15',
                                                                          timestep_respacing_up='15')
-# model.eval()
-# model_up.eval()
-# diffusion.eval()
-# diffusion_up.eval()
-print(os.cpu_count())
-# streamer = Streamer(sample_model,
-#                     batch_size=1,
-#                     max_latency=60*30,
-#                     worker_num=2,
-#                     wait_for_worker_ready=False,
-#                     cuda_devices=[0],
-#                     mp_start_method="fork")
-streamer = ThreadedStreamer(sample_model,
-                    batch_size=1,
-                    max_latency=60*30)
-
 
 @app.route('/predict', methods=['POST'])
 def predict():
