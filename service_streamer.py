@@ -15,7 +15,7 @@ from typing import List
 
 from managed_model import ManagedModel
 
-TIMEOUT = 1
+TIMEOUT = 60*30
 TIME_SLEEP = 0.001
 WORKER_TIMEOUT = 20
 logger = logging.getLogger(__name__)
