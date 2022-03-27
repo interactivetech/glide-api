@@ -19,7 +19,15 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
 
-streamer = ThreadedStreamer(sample_model(
+streamer = ThreadedStreamer(sample_model, batch_size=1)
+
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if request.method == 'POST':
+        file = request.files['file']
+        img_bytes = file.read()
+        up_samples = sample_model(
                         "a cat",
                         6,
                         guidance_scale,
@@ -30,16 +38,8 @@ streamer = ThreadedStreamer(sample_model(
                         diffusion_up,
                         options,
                         options_up,
-                        device), batch_size=1)
-
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    if request.method == 'POST':
-        file = request.files['file']
-        img_bytes = file.read()
-        class_id, class_name = get_prediction(img_bytes)
-        return jsonify({'class_id': class_id, 'class_name': class_name})
+                        device)
+        return jsonify({'done': 'done'})
 
 
 @app.route('/stream_predict', methods=['POST'])
@@ -47,7 +47,18 @@ def stream_predict():
     if request.method == 'POST':
         file = request.files['file']
         img_bytes = file.read()
-        class_id, class_name = streamer.predict([img_bytes])[0]
+        class_id, class_name = streamer.predict(
+                        "a cat",
+                        6,
+                        guidance_scale,
+                        upsample_temp,
+                        model,
+                        model_up,
+                        diffusion,
+                        diffusion_up,
+                        options,
+                        options_up,
+                        device)
         return jsonify({'class_id': class_id, 'class_name': class_name})
 
 
