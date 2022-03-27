@@ -133,8 +133,9 @@ class _BaseStreamer(object):
     def predict(self, batch):
         task_id = self._input(batch)
         ret = self._output(task_id)
-        assert len(batch) == len(ret), "input batch size {} and output batch size {} must be equal.".format(len(batch), len(ret))
-        return ret
+        res = [ret]
+        assert len(batch) == len(res), "input batch size {} and output batch size {} must be equal.".format(len(batch), len(ret))
+        return res
 
     def destroy_workers(self):
         raise NotImplementedError
