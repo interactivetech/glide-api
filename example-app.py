@@ -1,7 +1,6 @@
 # coding=utf-8
 # Created by Meteorix at 2019/8/9
 from flask import Flask, jsonify, request
-from model import get_prediction, batch_prediction
 from service_streamer import ThreadedStreamer
 from model import load_models, sample_model
 import torch as th
