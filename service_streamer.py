@@ -166,6 +166,7 @@ class _BaseStreamWorker(object):
 
     def model_predict(self, batch_input):
         batch_result = self._predict(*batch_input[0])
+        print("batch_result ",batch_result.shape)
         res = [batch_result]
         assert len(batch_input) == len(res), "input batch size {} and output batch size {} must be equal.".format(len(batch_input), len(batch_result))
         return batch_result
