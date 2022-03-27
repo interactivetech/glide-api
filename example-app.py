@@ -5,6 +5,8 @@ from service_streamer import ThreadedStreamer
 from model import load_models, sample_model
 import torch as th
 import numpy as np
+from PIL import Image
+import os
 app = Flask(__name__)
 # batch_size = 10
 guidance_scale = 3.0
@@ -60,9 +62,23 @@ def stream_predict():
                         device)]
                         )
         # up_samples = up_samples[0]
-
-        print(len(up_samples))
-        return jsonify({'done': 'done'})
+        encoded_images = [Image.fromarray(i) for i in up_samples]
+        names = []
+        url_paths = []
+        SAVE_DIR = '/images'
+        for ind,i in enumerate(encoded_images):
+            names.append('{}.jpg'.format(ind))
+            i.save(os.path.join(SAVE_DIR,names[ind]))
+            url_paths.append('https://dalleapi.com/static/{}'.format(names[ind]))
+        # encoded_imges = []
+        # for image_path in range(10):
+        #     encoded_imges.append(get_response_image_test())
+        s =  jsonify({'prompt':input_json['prompt'],
+                        'n_images':input_json['n_images'],
+                        'result': url_paths})
+        print(s)
+        # print(len(up_samples))
+        return s
 
 
 if __name__ == "__main__":
