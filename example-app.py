@@ -25,8 +25,8 @@ streamer = ThreadedStreamer(sample_model, batch_size=1)
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        file = request.files['file']
-        img_bytes = file.read()
+        input_json = request.get_json(force=True) 
+        # img_bytes = file.read()
         up_samples = sample_model(
                         "a cat",
                         6,
@@ -45,8 +45,7 @@ def predict():
 @app.route('/stream_predict', methods=['POST'])
 def stream_predict():
     if request.method == 'POST':
-        file = request.files['file']
-        img_bytes = file.read()
+        input_json = request.get_json(force=True) 
         class_id, class_name = streamer.predict(
                         "a cat",
                         6,
@@ -59,7 +58,7 @@ def stream_predict():
                         options,
                         options_up,
                         device)
-        return jsonify({'class_id': class_id, 'class_name': class_name})
+        return jsonify({'done': 'done'})
 
 
 if __name__ == "__main__":
