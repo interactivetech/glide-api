@@ -47,7 +47,7 @@ def stream_predict():
     if request.method == 'POST':
         input_json = request.get_json(force=True) 
         class_id, class_name = streamer.predict(
-                        "a cat",
+                        [("a cat",
                         6,
                         guidance_scale,
                         upsample_temp,
@@ -57,7 +57,8 @@ def stream_predict():
                         diffusion_up,
                         options,
                         options_up,
-                        device)
+                        device)]
+                        )
         return jsonify({'done': 'done'})
 
 
