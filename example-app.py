@@ -21,6 +21,10 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          device,
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
+model.shared_memory()
+model_up.shared_memory()
+diffusion.shared_memory()
+diffusion_up.shared_memory()
 print(os.cpu_count())
 streamer = Streamer(sample_model,
                     batch_size=1,
