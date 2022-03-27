@@ -1,7 +1,7 @@
 # coding=utf-8
 # Created by Meteorix at 2019/8/9
 from flask import Flask, jsonify, request
-from service_streamer import ThreadedStreamer
+from service_streamer import ThreadedStreamer, Streamer
 from model import load_models, sample_model
 import torch as th
 import numpy as np
@@ -10,7 +10,8 @@ import os
 app = Flask(__name__)
 # batch_size = 10
 guidance_scale = 3.0
-
+SAVE_DIR = '/images'
+os.makedirs(SAVE_DIR,exist_ok=True)
 # Tune this parameter to control the sharpness of 256x256 images.
 # A value of 1.0 is sharper, but sometimes results in grainy artifacts.
 upsample_temp = 0.997
@@ -20,8 +21,8 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          device,
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
-
-streamer = ThreadedStreamer(sample_model, batch_size=1,max_latency=60*30)
+print(os.cpu_count())
+streamer = Streamer(sample_model, batch_size=1,max_latency=60*30,worker_num=os.cpu_count())
 
 
 @app.route('/predict', methods=['POST'])
@@ -67,8 +68,7 @@ def stream_predict():
         encoded_images = [Image.fromarray(i) for i in up_samples[0][0]]
         names = []
         url_paths = []
-        SAVE_DIR = '/images'
-        os.makedirs(SAVE_DIR,exist_ok=True)
+
         for ind,i in enumerate(encoded_images):
             names.append('{}.jpg'.format(ind))
             i.save(os.path.join(SAVE_DIR,names[ind]))
