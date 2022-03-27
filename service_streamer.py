@@ -164,7 +164,7 @@ class _BaseStreamWorker(object):
         logger.info("[gpu worker %d] %s shutdown" % (self._pid, self))
 
     def model_predict(self, batch_input):
-        batch_result = self._predict(batch_input)
+        batch_result = self._predict(*batch_input[0])
         assert len(batch_input) == len(batch_result), "input batch size {} and output batch size {} must be equal.".format(len(batch_input), len(batch_result))
         return batch_result
 
