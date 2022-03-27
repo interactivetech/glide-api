@@ -60,8 +60,8 @@ def stream_predict():
                         device)]
                         )
         up_samples = up_samples[0]
-        
-        print(up_samples)
+
+        print(up_samples.shape)
         return jsonify({'done': 'done'})
 
 
