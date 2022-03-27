@@ -6,12 +6,7 @@ from model import load_models, sample_model
 import torch as th
 
 app = Flask(__name__)
-
-options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cuda,
-                                                                         device,
-                                                                         timestep_respacing='25',
-                                                                         timestep_respacing_up='fast27')
-batch_size = 10
+# batch_size = 10
 guidance_scale = 3.0
 
 # Tune this parameter to control the sharpness of 256x256 images.
@@ -19,6 +14,11 @@ guidance_scale = 3.0
 upsample_temp = 0.997
 has_cuda = th.cuda.is_available()
 device = th.device('cpu' if not has_cuda else 'cuda')
+options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cuda,
+                                                                         device,
+                                                                         timestep_respacing='25',
+                                                                         timestep_respacing_up='fast27')
+
 streamer = ThreadedStreamer(sample_model(
                         "a cat",
                         6,
