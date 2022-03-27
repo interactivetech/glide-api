@@ -20,7 +20,7 @@ device = th.device('cpu' if not has_cuda else 'cuda')
 options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cuda,
                                                                          device,
                                                                          timestep_respacing='25',
-                                                                         timestep_respacing_up='fast27')
+                                                                         timestep_respacing_up='20')
 # model.eval()
 # model_up.eval()
 # diffusion.eval()
