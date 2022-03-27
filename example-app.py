@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 from service_streamer import ThreadedStreamer
 from model import load_models, sample_model
 import torch as th
-
+import numpy as np
 app = Flask(__name__)
 # batch_size = 10
 guidance_scale = 3.0
@@ -61,7 +61,7 @@ def stream_predict():
                         )
         up_samples = up_samples[0]
 
-        print(up_samples.shape)
+        print(up_samples[0].shape)
         return jsonify({'done': 'done'})
 
 
