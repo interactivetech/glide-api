@@ -22,7 +22,7 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
 print(os.cpu_count())
-streamer = Streamer(sample_model, batch_size=1,max_latency=60*30,worker_num=os.cpu_count())
+streamer = Streamer(sample_model, batch_size=1,max_latency=60*30,worker_num=2)
 
 
 @app.route('/predict', methods=['POST'])
