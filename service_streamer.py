@@ -13,7 +13,7 @@ from typing import List
 
 # from redis import Redis
 
-from .managed_model import ManagedModel
+from managed_model import ManagedModel
 
 TIMEOUT = 1
 TIME_SLEEP = 0.001
