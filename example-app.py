@@ -21,7 +21,7 @@ options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cud
                                                                          timestep_respacing='25',
                                                                          timestep_respacing_up='fast27')
 
-streamer = ThreadedStreamer(sample_model, batch_size=1,max_latency=180)
+streamer = ThreadedStreamer(sample_model, batch_size=1,max_latency=60*30)
 
 
 @app.route('/predict', methods=['POST'])
