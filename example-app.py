@@ -59,7 +59,7 @@ def stream_predict():
                         options_up,
                         device)]
                         )
-        # up_samples = up_samples
+        up_samples = up_samples[0][0]
         print(len(up_samples))
         return jsonify({'done': 'done'})
 
