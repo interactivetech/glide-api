@@ -66,7 +66,7 @@ def stream_predict():
         names = []
         url_paths = []
         SAVE_DIR = '/images'
-        os.makedirs(SAVE_DIR)
+        os.makedirs(SAVE_DIR,exist_ok=True)
         for ind,i in enumerate(encoded_images):
             names.append('{}.jpg'.format(ind))
             i.save(os.path.join(SAVE_DIR,names[ind]))
