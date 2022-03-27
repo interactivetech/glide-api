@@ -30,7 +30,7 @@ streamer = ThreadedStreamer(sample_model(
                         diffusion_up,
                         options,
                         options_up,
-                        device), batch_size=64)
+                        device), batch_size=1)
 
 
 @app.route('/predict', methods=['POST'])
