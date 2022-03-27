@@ -62,6 +62,7 @@ def stream_predict():
                         device)]
                         )
         # up_samples = up_samples[0]
+        print(up_samples.shape)
         encoded_images = [Image.fromarray(i) for i in up_samples[0]]
         names = []
         url_paths = []
