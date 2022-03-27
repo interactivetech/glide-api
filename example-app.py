@@ -28,7 +28,7 @@ streamer = Streamer(sample_model,
                     worker_num=2,
                     wait_for_worker_ready=True,
                     cuda_devices=[0],
-                    mp_start_method="fork")
+                    mp_start_method="spawn")
 
 
 @app.route('/predict', methods=['POST'])
