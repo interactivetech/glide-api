@@ -20,5 +20,5 @@ class ManagedModel(object):
     def init_model(self, *args, **kwargs):
         raise NotImplementedError
 
-    def predict(self, batch: List) -> List:
+    def predict(self, *args):
         raise NotImplementedError
