@@ -63,8 +63,8 @@ def stream_predict():
     if request.method == 'POST':
         input_json = request.get_json(force=True) 
         up_samples = streamer.predict(
-                        [("a cat",
-                        6,
+                        [(input_json['prompt'],
+                        input_json['n_images'],
                         guidance_scale,
                         upsample_temp,
                         model,
