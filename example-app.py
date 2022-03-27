@@ -79,6 +79,7 @@ def stream_predict():
         
         print(up_samples[0][0].shape)
         encoded_images = [Image.fromarray(i) for i in up_samples[0][0]]
+        encoded_images [im.resize(256,256) for i in encoded_images]
         names = []
         url_paths = []
 
