@@ -169,7 +169,7 @@ class _BaseStreamWorker(object):
         print("batch_result ",batch_result.shape)
         res = [batch_result]
         assert len(batch_input) == len(res), "input batch size {} and output batch size {} must be equal.".format(len(batch_input), len(batch_result))
-        return batch_result
+        return res
 
     def _run_once(self):
         batch = []
