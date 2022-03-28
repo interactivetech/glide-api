@@ -22,7 +22,7 @@ from waitress import serve
 streamer = Streamer(sample_model,
                     batch_size=1,
                     max_latency=60*30,
-                    worker_num=4,
+                    worker_num=2,
                     wait_for_worker_ready=False,
                     cuda_devices=[0],
                     mp_start_method="fork")
