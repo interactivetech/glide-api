@@ -113,7 +113,7 @@ def generate():
                         input_json['type']
                         )
                 up_samples = streamer.predict(
-                        [input_json['prompt'],
+                        [(input_json['prompt'],
                         input_json['n_images'],
                         guidance_scale,
                         upsample_temp,
@@ -123,7 +123,7 @@ def generate():
                         diffusion_up_100,
                         options_100,
                         options_up_100,
-                        device]
+                        device)]
                         )
                 
 
