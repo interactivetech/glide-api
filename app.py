@@ -33,12 +33,12 @@ t0=time()
 
 options, options_up,model,model_up,diffusion, diffusion_up = load_models(has_cuda,
                                                                          device,
-                                                                         timestep_respacing='25',
-                                                                         timestep_respacing_up='fast27')
-options_100, options_up_100,model_100,model_up_100,diffusion_100, diffusion_up_100 = load_models(has_cuda,
-                                                                         device,
-                                                                         timestep_respacing='75',
-                                                                         timestep_respacing_up='fast27')
+                                                                         timestep_respacing='15',
+                                                                         timestep_respacing_up='15')
+# options_100, options_up_100,model_100,model_up_100,diffusion_100, diffusion_up_100 = load_models(has_cuda,
+#                                                                          device,
+#                                                                          timestep_respacing='75',
+#                                                                          timestep_respacing_up='fast27')
 print("Done Loading, time: {} sec.".format(time()-t0))
 
 batch_size = 10
@@ -101,30 +101,30 @@ def generate():
                         options_up,
                         device)]
                         )
-            elif input_json['type']=='high':
-                app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
-                        timestamp,
-                        request.remote_addr,
-                        request.method,
-                        request.scheme,
-                        request.full_path,
-                        input_json['prompt'],
-                        input_json['n_images'],
-                        input_json['type']
-                        )
-                up_samples = streamer.predict(
-                        [(input_json['prompt'],
-                        input_json['n_images'],
-                        guidance_scale,
-                        upsample_temp,
-                        model_100,
-                        model_up_100,
-                        diffusion_100,
-                        diffusion_up_100,
-                        options_100,
-                        options_up_100,
-                        device)]
-                        )
+            # elif input_json['type']=='high':
+            #     app.logger.info('%s,%s,%s,%s,%s,%s,%s,%s',
+            #             timestamp,
+            #             request.remote_addr,
+            #             request.method,
+            #             request.scheme,
+            #             request.full_path,
+            #             input_json['prompt'],
+            #             input_json['n_images'],
+            #             input_json['type']
+            #             )
+            #     up_samples = streamer.predict(
+            #             [(input_json['prompt'],
+            #             input_json['n_images'],
+            #             guidance_scale,
+            #             upsample_temp,
+            #             model_100,
+            #             model_up_100,
+            #             diffusion_100,
+            #             diffusion_up_100,
+            #             options_100,
+            #             options_up_100,
+            #             device)]
+            #             )
                 
 
             # model.del_cache()
