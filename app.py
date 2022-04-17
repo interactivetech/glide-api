@@ -43,7 +43,7 @@ print("Done Loading, time: {} sec.".format(time()-t0))
 
 batch_size = 10
 guidance_scale = 3.0
-SAVE_DIR = '/images'
+SAVE_DIR = './images'
 os.makedirs(SAVE_DIR,exist_ok=True)
 # Tune this parameter to control the sharpness of 256x256 images.
 # A value of 1.0 is sharper, but sometimes results in grainy artifacts.
@@ -201,6 +201,6 @@ if __name__ == '__main__':
     app.logger.info("timestamp,request.remote_addr,request.method,request.scheme,request.full_path,prompt,n_images,type")
     # app.run(
     #     host="0.0.0.0",
-    #     port=5000
+    #     port=8080
     # )
     serve(app,host='0.0.0.0',port=5000,threads=1)
